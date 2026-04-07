@@ -1,11 +1,12 @@
 from pydantic import BaseModel
+from decimal import Decimal
 
 class CreateOrder(BaseModel):
-    amount: float
+    amount: Decimal
 
 class PaymentModel(BaseModel):
     curr_id: int
-    payment: float
+    payment: Decimal
 
 class StatusModel(BaseModel):
     curr_id: int
@@ -18,8 +19,8 @@ class CreateOrderOut(BaseModel):
 class PaymentModelOut(BaseModel):
     order_id: int
     status: str
-    remaining: float | None = None
+    remaining: Decimal | None = None
 
 class StatusOut(BaseModel):
     status: str
-    amount: float
+    amount: Decimal

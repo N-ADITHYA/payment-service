@@ -1,12 +1,13 @@
 from database import fakeDb
 from fastapi import HTTPException
+from decimal import Decimal
 
 
 dB = fakeDb.db
 order_id = 0
 
-def create_order(amount: float):
-
+def create_order(amount: Decimal):
+    amount = Decimal(amount)
     if amount <= 0:
         raise HTTPException(status_code=400, detail="Amount must be positive")
     global order_id
@@ -14,7 +15,7 @@ def create_order(amount: float):
     curr_id = order_id
     dB[curr_id] = {
         "status": "Created",
-        "amount": amount
+        "amount": Decimal(amount)
     }
 
     print(dB)
@@ -24,7 +25,8 @@ def create_order(amount: float):
     }
 
 
-def pay(curr_id: int, payment: float):
+def pay(curr_id: int, payment: Decimal):
+    payment = Decimal(payment)
     if curr_id not in dB:
         raise HTTPException(status_code=404, detail="Order not found")
     order = dB[curr_id]
@@ -51,7 +53,7 @@ def pay(curr_id: int, payment: float):
 
     elif payment == order["amount"]:
         order["status"] = "Completed"
-        order["amount"] = 0
+        order["amount"] = Decimal("0")
 
         return {
             "order_id": curr_id,
