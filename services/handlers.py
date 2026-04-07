@@ -7,7 +7,7 @@ dB = fakeDb.db
 order_id = 0
 
 def create_order(amount: Decimal):
-    amount = Decimal(amount)
+    amount = Decimal(amount).quantize(Decimal("0.01"))
     if amount <= 0:
         raise HTTPException(status_code=400, detail="Amount must be positive")
     global order_id
@@ -26,7 +26,7 @@ def create_order(amount: Decimal):
 
 
 def pay(curr_id: int, payment: Decimal):
-    payment = Decimal(payment)
+    payment = Decimal(payment).quantize(Decimal("0.01"))
     if curr_id not in dB:
         raise HTTPException(status_code=404, detail="Order not found")
     order = dB[curr_id]
